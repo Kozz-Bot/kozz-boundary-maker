@@ -663,6 +663,17 @@ jsonc-parser@^3.0.0:
   resolved "https://registry.yarnpkg.com/jsonc-parser/-/jsonc-parser-3.2.0.tgz#31ff3f4c2b9793f89c67212627c51c6394f88e76"
   integrity sha512-gfFQZrcTc8CnKXp6Y4/CBT3fTc0OVuDofpre4aEeEpSBPV5X5v4+Vmx+8snU7RLPrNHPKSgLxGo9YuQzz20o+w==
 
+kozz-boundary-maker@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/kozz-boundary-maker/-/kozz-boundary-maker-1.0.0.tgz#df0e80f4a6e708499ac85c975d0d66f145fdb1c2"
+  integrity sha512-aV4Ptsyg3NQGWTbL65ZVBEGrAVEgoJsRGjHruXOpF5PO2b/0tv2GSr/XYeiSy4YqWIBwKS/r2ilAdNtUFnBU9g==
+  dependencies:
+    "@guigalleta/t-parser" "^2.1.1"
+    express "^4.18.2"
+    link-module-alias "^1.2.0"
+    socket.io-client "^4.7.5"
+    typescript "^4.9.3"
+
 kozz-types@^0.1.11:
   version "0.1.11"
   resolved "https://registry.yarnpkg.com/kozz-types/-/kozz-types-0.1.11.tgz#5bbe54052e959cbf389b3c0d4f004a7d05892b4c"

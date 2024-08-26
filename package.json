@@ -1,7 +1,7 @@
 {
-	"name": "Hello-World",
-	"version": "1.0.0",
-	"description": "Hello world project",
+	"name": "kozz-boundary-maker",
+	"version": "0.0.1",
+	"description": "Wrapper library for creation of boundaries compatible with kozz-bot",
 	"main": "./dist/index.js",
 	"license": "MIT",
 	"scripts": {
@@ -20,6 +20,7 @@
 	"dependencies": {
 		"@guigalleta/t-parser": "^2.1.1",
 		"express": "^4.18.2",
+		"kozz-boundary-maker": "^1.0.0",
 		"link-module-alias": "^1.2.0",
 		"socket.io-client": "^4.7.5",
 		"typescript": "^4.9.3"
