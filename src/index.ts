@@ -1,10 +1,12 @@
 import {
+	AskResourcePayload,
 	BoundaryIntroduction,
 	DeleteMessagePayload,
 	ForwardableUserJoinedGroup,
 	ForwardableUserLeftGroup,
 	MessageReceived,
 	Platform,
+	ProvideResourcePayload,
 	ReactToMessagePayload,
 	SendMediaPayload,
 	SendMessagePayload,
@@ -250,9 +252,38 @@ const initBoundary = ({
 		});
 	};
 
+	type ResourceGetterFn = (data: any) => any;
+	const resourceMap: Record<string, ResourceGetterFn> = {};
+
+	const onAskResource = (resourceName: string, getterFn: ResourceGetterFn) => {
+		resourceMap[resourceName] = getterFn;
+	};
+
+	const gatherResource = (resourceName: string, data: any) => {
+		if (!resourceMap[resourceName]) {
+			return undefined;
+		}
+
+		return resourceMap[resourceName](data);
+	};
+
+	kozzSocket.on('ask_resource', async (payload: AskResourcePayload) => {
+		const { data, resource } = payload.request;
+		const response = await gatherResource(resource, data);
+
+		const responsePayload: ProvideResourcePayload = {
+			...payload,
+			response,
+			timestamp: new Date().getTime(),
+		};
+
+		kozzSocket.emit('reply_resource', responsePayload);
+	});
+
 	return {
 		kozzSocket,
 		on,
+		onAskResource,
 		emitForwardableEvent,
 		emitMessage,
 		emitUserJoinedGroup,
