@@ -181,14 +181,17 @@ const initBoundary = ({
 	};
 
 	const handleSendMessageWithMedia = (
-		sendMessageFn: (payload: SendMediaPayload) => any
+		replyFn: (
+			payload: SendMediaPayload,
+			companion: CompanionObject,
+			stringValue: string
+		) => any
 	) => {
-		kozzSocket.on('send_message_with_media', payload => {
-			if (!payload.media) {
-				throw '[ERROR]: Evoked reply_with_sticker with payload without media';
-			}
+		kozzSocket.on('send_message_with_media', async (payload: SendMediaPayload) => {
+			const results = parseMessageBody(payload.body);
+			const { companion, stringValue } = await consume(results, payload);
 
-			sendMessageFn(payload);
+			return replyFn(payload, companion, stringValue);
 		});
 	};
 
