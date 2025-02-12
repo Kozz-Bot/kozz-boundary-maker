@@ -82,7 +82,10 @@ const initBoundary = ({
 	});
 
 	const emitForwardableEvent = (evName: string, payload: any) => {
-		kozzSocket.emit(evName, payload);
+		kozzSocket.emit('forward_event', {
+			eventName: evName,
+			payload,
+		});
 	};
 
 	const emitMessage = (payload: MessageReceived) => {
