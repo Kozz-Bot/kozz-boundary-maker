@@ -26,7 +26,7 @@ type InitOptions = {
 	socketPath?: string;
 	chatPlatform: Platform;
 	name: string;
-	inlineCommandMap?: InlineCommandMap;
+	inlineCommandMap?: Partial<InlineCommandMap>;
 };
 
 type EventPayload = {

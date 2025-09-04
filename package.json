@@ -1,22 +1,24 @@
 {
 	"name": "kozz-boundary-maker",
-	"version": "0.0.8",
+	"version": "0.1.0",
 	"description": "Wrapper library for creation of boundaries compatible with kozz-bot",
 	"main": "./dist/index.js",
 	"license": "MIT",
 	"scripts": {
-		"dev": "tsc && link-module-alias && concurrently \"tsc --watch\" \"nodemon dist/index.js\"",
-		"start": "tsc && link-module-alias && node dist/index.js",
+		"build": "tsc",
+		"dev": "npm run build -- --watch & node --watch --watch-path=dist dist/debugIndex.js",
+		"start": "npm run build && node --env-file=.env dist/debugIndex.js",
 		"test": "jest",
 		"docs": "typedoc ./src/index.ts",
 		"prepublish": "tsc"
 	},
 	"devDependencies": {
-		"typescript": "^4.9.5",
-		"kozz-types": "@latest"
+		"typescript": "^4.9.5"
 	},
 	"dependencies": {
 		"@guigalleta/t-parser": "^2.1.1",
+		"arcsecond": "^5.0.0",
+		"kozz-types": "^0.1.22",
 		"socket.io-client": "^4.8.1"
 	},
 	"_moduleAliases": {

@@ -1,3 +1,5 @@
 node_modules
 src
 coverage
+debugIndex.ts
+keys

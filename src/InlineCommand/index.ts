@@ -1,21 +1,29 @@
-import { Command, parseMessageBody, PlainText } from './parser';
+import { Command, PlainText } from './parser';
 import { SendMessagePayload } from 'kozz-types';
 
 export type CompanionObject = {
 	mentions: string[];
 };
 
+export type StyleVariant =
+	| 'bold'
+	| 'code'
+	| 'monospace'
+	| 'stroke'
+	| 'italic'
+	| 'listItem'
+	| 'paragraph';
+
 type CommandArgs = {
 	mention: { id: string };
 	invisiblemention: { id: string };
 	tageveryone: { except: string[] };
-	bold: { content: string };
-	italic: { content: string };
-	underscore: { content: string };
-	stroke: { content: string };
-	paragraph: { content: string };
-	listitem: { content: string };
-	monospace: { content: string };
+	begin_style: {
+		variant: StyleVariant;
+	};
+	end_style: {
+		variant: StyleVariant;
+	};
 };
 
 type InlineCommandHandler<T extends Record<string, any>> = (

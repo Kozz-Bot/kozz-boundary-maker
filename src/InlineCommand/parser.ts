@@ -15,7 +15,7 @@ const commandParser = T.transform(
 	T.sequenceOf(
 		[
 			T.str('%', 'Command Starter'),
-			T.letters,
+			T.regexMatch(/^[^:]+/, 'Command Name'),
 			T.str(':', 'Command name-payload divider'),
 			T.regexMatch(/^[^}]+/, 'Command payload'),
 			T.str('}'),
@@ -40,7 +40,9 @@ const stringParser = T.transform(
 const parser = T.atLeastOne(T.choice([stringParser, commandParser]));
 
 export const parseMessageBody = (string: string) => {
-	const { isError, result } = T.parse(string, parser);
+	const { isError, result, errorStack, error } = T.parse(string, parser);
+
+	console.log({ result, errorStack, error });
 
 	if (isError) {
 		return [
