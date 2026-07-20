@@ -1,6 +1,6 @@
 {
 	"name": "kozz-boundary-maker",
-	"version": "0.1.0",
+	"version": "1.1.0",
 	"description": "Wrapper library for creation of boundaries compatible with kozz-bot",
 	"main": "./dist/index.js",
 	"license": "MIT",
@@ -13,12 +13,13 @@
 		"prepublish": "tsc"
 	},
 	"devDependencies": {
+		"@types/node": "^24.0.0",
 		"typescript": "^4.9.5"
 	},
 	"dependencies": {
 		"@guigalleta/t-parser": "^2.1.1",
 		"arcsecond": "^5.0.0",
-		"kozz-types": "^0.1.22",
+		"kozz-types": "^0.2.0",
 		"socket.io-client": "^4.8.1"
 	},
 	"_moduleAliases": {
