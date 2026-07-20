@@ -19,7 +19,7 @@
 	"dependencies": {
 		"@guigalleta/t-parser": "^2.1.1",
 		"arcsecond": "^5.0.0",
-		"kozz-types": "^0.2.0",
+		"kozz-types": "^0.2.1",
 		"socket.io-client": "^4.8.1"
 	},
 	"_moduleAliases": {
