@@ -1,5 +1,3 @@
-import * as T from '@guigalleta/t-parser';
-
 export type PlainText = {
 	type: 'string';
 	value: string;
@@ -11,47 +9,112 @@ export type Command<N extends string, T extends Record<string, any> = {}> = {
 	commandData: T;
 };
 
-const commandParser = T.transform(
-	T.sequenceOf(
-		[
-			T.str('%', 'Command Starter'),
-			T.regexMatch(/^[^:]+/, 'Command Name'),
-			T.str(':', 'Command name-payload divider'),
-			T.regexMatch(/^[^}]+/, 'Command payload'),
-			T.str('}'),
-		],
-		'Command'
-	),
-	({ result }) => ({
-		type: 'command',
-		commandName: result[1],
-		commandData: JSON.parse(result[3] + result[4]),
-	})
-);
+const readJsonPayload = (input: string, start: number) => {
+	if (input[start] !== '{') {
+		return null;
+	}
 
-const stringParser = T.transform(
-	T.regexMatch(/^[^%]+/, 'Any text'),
-	({ result }) => ({
-		type: 'string',
-		value: result,
-	})
-);
+	let depth = 0;
+	let inString = false;
+	let escaped = false;
 
-const parser = T.atLeastOne(T.choice([stringParser, commandParser]));
+	for (let i = start; i < input.length; i++) {
+		const char = input[i];
+		if (escaped) {
+			escaped = false;
+			continue;
+		}
+		if (char === '\\') {
+			escaped = true;
+			continue;
+		}
+		if (char === '"') {
+			inString = !inString;
+			continue;
+		}
+		if (inString) {
+			continue;
+		}
+		if (char === '{') {
+			depth++;
+		}
+		if (char === '}') {
+			depth--;
+			if (depth === 0) {
+				return input.slice(start, i + 1);
+			}
+		}
+	}
 
-export const parseMessageBody = (string: string) => {
-	const { isError, result, errorStack, error } = T.parse(string, parser);
+	return null;
+};
 
-	console.log({ result, errorStack, error });
+const parseInlineCommandAt = (input: string, start: number) => {
+	const match = /^%([^:%]+):/.exec(input.slice(start));
+	if (!match) {
+		return null;
+	}
 
-	if (isError) {
+	const payloadStart = start + match[0].length;
+	const payload = readJsonPayload(input, payloadStart);
+	if (!payload) {
+		return null;
+	}
+
+	try {
+		return {
+			item: {
+				type: 'command',
+				commandName: match[1],
+				commandData: JSON.parse(payload),
+			} as const,
+			nextIndex: payloadStart + payload.length,
+		};
+	} catch {
+		return null;
+	}
+};
+
+export const parseMessageBody = (string: string): (PlainText | Command<any>)[] => {
+	const result: (PlainText | Command<any>)[] = [];
+	let stringBuffer = '';
+
+	for (let i = 0; i < string.length;) {
+		const command = string[i] === '%' ? parseInlineCommandAt(string, i) : null;
+
+		if (command) {
+			if (stringBuffer) {
+				result.push({
+					type: 'string',
+					value: stringBuffer,
+				});
+				stringBuffer = '';
+			}
+
+			result.push(command.item);
+			i = command.nextIndex;
+			continue;
+		}
+
+		stringBuffer += string[i];
+		i++;
+	}
+
+	if (stringBuffer) {
+		result.push({
+			type: 'string',
+			value: stringBuffer,
+		});
+	}
+
+	if (!result.length) {
 		return [
 			{
 				type: 'string',
 				value: string,
-			} as const,
+			},
 		];
 	}
 
-	return result as (PlainText | Command<any>)[];
+	return result;
 };

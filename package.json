@@ -1,6 +1,6 @@
 {
 	"name": "kozz-boundary-maker",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Wrapper library for creation of boundaries compatible with kozz-bot",
 	"main": "./dist/index.js",
 	"license": "MIT",

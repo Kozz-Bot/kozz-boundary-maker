@@ -26,6 +26,7 @@ type InitOptions = {
 	socketPath?: string;
 	chatPlatform: Platform;
 	name: string;
+	namespace?: string;
 	inlineCommandMap?: Partial<InlineCommandMap>;
 };
 
@@ -62,6 +63,7 @@ const initBoundary = ({
 	socketPath,
 	chatPlatform,
 	name,
+	namespace = process.env.KOZZ_NAMESPACE || process.env.NAMESPACE || 'default',
 	inlineCommandMap,
 }: InitOptions) => {
 	const kozzSocket = io(url, {
@@ -76,6 +78,7 @@ const initBoundary = ({
 			platform: chatPlatform,
 			role: 'boundary',
 			name,
+			namespace,
 		};
 
 		kozzSocket.emit('introduction', signPayload(payload));
